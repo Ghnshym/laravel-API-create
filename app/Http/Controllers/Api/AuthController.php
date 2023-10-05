@@ -80,4 +80,9 @@ class AuthController extends Controller
             return response()->json($response, 400);
         }
     }
+
+    public function getUsers() {
+        $users = User::all();
+        return response()->json($users);
+    }
 }
