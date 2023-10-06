@@ -15,7 +15,7 @@ class AuthController extends Controller
         // Validate the request
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users', // Use 'users' table for uniqueness check
+            'email' => 'required|email|unique:users',
             'password' => 'required'
         ]);
 
@@ -24,18 +24,14 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => $validator->errors()
             ];
-
             return response()->json($response, 400);
         }
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-
         $user = User::create($input);
 
         $success['token'] = $user->createToken('myApp')->plainTextToken;
         $success['name'] = $user->name;
-
         $response = [
             'success' => true,
             'data' => $success,
@@ -51,16 +47,13 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         if ($validator->fails()) {
             $response = [
                 'success' => false,
                 'message' => $validator->errors()
             ];
-
             return response()->json($response, 400);
         }
-
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $success['token'] = $user->createToken('myApp')->plainTextToken;
@@ -80,6 +73,7 @@ class AuthController extends Controller
             return response()->json($response, 400);
         }
     }
+
 
     public function getUsers() {
         $users = User::all();
